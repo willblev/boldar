@@ -1,0 +1,57 @@
+File aemet_weather.25.09.2015.csv already exists!
+File aemet_weather.24.09.2015.csv already exists!
+File aemet_weather.23.09.2015.csv already exists!
+File aemet_weather.22.09.2015.csv already exists!
+File aemet_weather.21.09.2015.csv already exists!
+File aemet_weather.20.09.2015.csv already exists!
+File aemet_weather.19.09.2015.csv already exists!
+Condsidering weather patterns from 19.09.2015 through 22.09.2015
+Ripoll 221.0
+Les Planes d'Hostoles 92.6666666667
+Llorac 56.5714285714
+Coll de Narg� 53.0
+La Vall de Bianya 51.2222222222
+Talarn 44.6666666667
+Boss�st 43.2857142857
+Pontons 42.2857142857
+Porqueres 41.5
+Tona 40.7647058824
+Sant Juli�  de Vilatorta 40.7647058824
+Esterri d'�neu 40.1111111111
+Sant Pau de Seg�ries 40.1111111111
+Os de Balaguer 39.1111111111
+Sant Hilari 39.0
+Balsareny 36.0
+Josa i Tuix�n 35.8965517241
+Planoles 35.8965517241
+Girona Aeropuerto 35.1428571429
+Moi� -16.6153846154
+Martinet -17.7142857143
+Santa Susana -18.5
+Ma�anet de Cabrenys -19.8888888889
+Berga -20.2352941176
+Prat de Llu�an�s -20.4736842105
+La Vall de Boi -23.0
+Castell, Platja d'Aro -24.1034482759
+Mollerussa -24.9393939394
+Manresa -25.5945945946
+Vilafranca del Pened�s -25.7368421053
+Girona -26.0
+La Pobla de Massaluca -26.2380952381
+L'Estartit -26.5555555556
+Lleida -26.5945945946
+Caldes de Montbui -26.7368421053
+Rasquera -26.7446808511
+La Molina -27.2962962963
+Blanes -27.5517241379
+Barcelona, Museo Mar�timo -27.5517241379
+Figueres -27.6101694915
+Tarragona -27.6101694915
+Espolla -27.8333333333
+Vandell�s -28.0149253731
+Tortosa -28.0588235294
+Barcelona Aeropuerto -28.2962962963
+Reus Aeropuerto -28.8253968254
+Barcelona -29.2264150943
+Cabac�s -34.7446808511
+Arenys de Mar -34.8333333333
