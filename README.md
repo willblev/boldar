@@ -1,6 +1,6 @@
 # boldar
-Boldar (Bolet Radar) A python script which scrapes weather records and tries to pinpoint the best area for mushroom hunting
+Boldar (Bolet Radar) A python script which scrapes weather records and tries to pinpoint the best area for mushroom hunting in Catalunya.
 
-This script will download .csv files from http://www.aemet.es/ to the current directory, and parse them for information about precipitation, wind, temperature, etc.
+The python script will download .csv files from http://www.aemet.es/ to its current directory, and then it will parse them for information about precipitation, wind, temperature, etc. It uses this data to rank the best areas for mushroom hunting.
 
-We plan to add static profiles for each station (altitude, forest types, soil types, etc.) to improve the predictive power of this model.
+In the future we plan to add static profiles for each location (altitude, forest types, soil types, etc.) to improve the predictive power of this model. Additionally, static mushroom profiles could be implemented as each species tends to grow best in different conditions and at different times.
