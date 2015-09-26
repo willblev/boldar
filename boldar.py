@@ -49,7 +49,10 @@ class Station:
 		self.days_ago= days_ago	
 	
 	def get_score(self):
-		score=10/abs(float(self.avg_temp)-15)  #ideal temp of 15C, more points for staying close
+		if float(self.avg_temp)==15:
+			score=11
+		else:
+			score=10/(abs(float(self.avg_temp)-15))  #ideal temp of 15C, more points for staying close
 		score+=float(self.prec_24h)            #points for quantity of rain + extra for constant rain
 		if float(self.prec_0_6) > 0:   
 			score+=1
@@ -116,7 +119,7 @@ for key, value in need_to_download.iteritems():  ###3. download any missing weat
 	
 list_of_stations=[]                              ###4. parse .csv files from 4-7 days ago
 print "Condsidering weather patterns from %s through %s" %((today - timedelta(7)).strftime('%d.%m.%Y'), (today - timedelta(4)).strftime('%d.%m.%Y'))
-for x in range(7,8):  
+for x in range(1,8):  
 	parse_csv(last_week[x],x,list_of_stations)
 	
 	
@@ -128,7 +131,8 @@ for station in list_of_stations:
 	else:
 		scores[station.name]=station.get_score()
 
+outfile=open("scores_predicted.txt",'w')
 for w in sorted(scores, key=scores.get, reverse=True):
-  print w, scores[w]
-	
+  outfile.write("%s, %d\n" %( w, scores[w]))
+outfile.close()
 
