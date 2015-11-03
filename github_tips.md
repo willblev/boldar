@@ -46,8 +46,9 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub
  ```
- * Copy the contents of .ssh/id_rsa.pub into ; it should start with 'ssh-rsa'.
- #Using git with github
+ * Copy the contents of .ssh/id_rsa.pub (it should start with 'ssh-rsa') and add a new SSH key at https://github.com/settings/ssh
+ 
+#Using git with github
  **Commiting**
  * Now that you have a repository on your local machine, you can start making changes
  
