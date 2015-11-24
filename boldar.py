@@ -36,11 +36,15 @@ class Station:
 				
 		self.name= name.replace("'", '')
 		self.province= province
-		self.max_temp=max_temp
-		self.min_temp=min_temp
+		split_max_temp=max_temp.split()
+		self.max_temp=split_max_temp[0]
+		split_min_temp=min_temp.split()
+		self.min_temp=split_min_temp[0]
 		self.avg_temp=avg_temp
-		self.gust_wind=gust_wind
-		self.max_wind=max_wind
+		split_gust_wind=gust_wind.split()
+		self.gust_wind=split_gust_wind[0]
+		split_max_wind=max_wind.split()
+		self.max_wind=split_max_wind[0]
 		self.prec_24h=prec_24h
 		self.prec_0_6= prec_0_6
 		self.prec_6_12= prec_6_12
@@ -63,13 +67,13 @@ class Station:
 		if float(self.prec_18_24) > 0:
 			score+=1
 
-		score+=15-float(self.max_wind.strip()[0] )/2  #wind over 15kph will dry out mushrooms
-		
-		if float(self.min_temp.strip()[0] ) < 4:   # fixed penalties for extreme weather
+		score+=15-float(self.max_wind)/2  #wind over 15kph will dry out mushrooms
+		#print self.min_temp.strip()
+		if float(self.min_temp ) < 4:   # fixed penalties for extreme weather
 			score+=-30
-		if float(self.max_temp.strip()[0] ) > 23:
+		if float(self.max_temp ) > 23:
 			score+=-10
-		if float(self.gust_wind.strip()[0]) > 35:
+		if float(self.gust_wind) > 35:
 			score+=-5
 		score=score*(self.days_ago/3)
 		return score
@@ -101,7 +105,7 @@ today=date.today()                                ###1. check today's date
 
 last_week={}                                      ###2. check if necessary files are already downloaded
 need_to_download={}
-for x in range(1,8):    
+for x in range(1,10):    
 	 lastweek=today - timedelta(x)
 	 filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
 	 last_week[x]=filename
@@ -119,7 +123,7 @@ for key, value in need_to_download.iteritems():  ###3. download any missing weat
 	
 list_of_stations=[]                              ###4. parse .csv files from 4-7 days ago
 print "Condsidering weather patterns from %s through %s" %((today - timedelta(7)).strftime('%d.%m.%Y'), (today - timedelta(4)).strftime('%d.%m.%Y'))
-for x in range(4,8):  
+for x in range(4,10):  
 	parse_csv(last_week[x],x,list_of_stations)
 	
 	
@@ -134,6 +138,7 @@ for station in list_of_stations:
 outfile=open("scores_predicted.txt",'w')
 for w in sorted(scores, key=scores.get, reverse=True):  # save record of the scores
   outfile.write("%s, %d\n" %( w, scores[w]))
+  print scores[w]
 outfile.close()
 
 
@@ -154,6 +159,7 @@ station_location={
 	'Cabac\xe9s':'41.24746, 0.733977',
 	'Caldes de Montbui':'41.631658, 2.166871',
 	'Castell, Platja dAro':'41.814447, 3.032187',
+	'Castello dEmpuries':'42.2583, 3.0750',
 	'Coll de Narg\xf3':'42.173822, 1.316197',
 	'Corbera, Pic dAgulles':'41.385064, 2.173403',
 	'El Soleràs':'41.413591, 0.68027',
@@ -175,6 +181,7 @@ station_location={
 	'La Vall de Boi':'42.528216, 0.848452',
 	'Les Planes dHostoles':'42.056386, 2.538365',
 	'Lleida':'41.61759, 0.620015',
+	'Llimiana':'42.0667, 0.9167',
 	'Llorac':'41.556803, 1.307315',
 	'Ma\xe7anet de Cabrenys':'42.387334, 2.752456',
 	'Manresa':'41.729283, 1.822515',
@@ -205,7 +212,8 @@ station_location={
 	'Tortosa':'40.812578, 0.521442',
 	'Valls':'41.285445, 1.249459',
 	'Vandell\xf3s':'41.019496, 0.831619',
-	'Vilafranca del Pened\xe8s':'41.346127, 1.69794'
+	'Vilafranca del Pened\xe8s':'41.346127, 1.69794',
+	'Vilassar de Dalt':'41.5189, 2.3606'
 
 
 }
@@ -214,16 +222,16 @@ station_location={
 os.system("cat map_webpage_beginning.txt > map_w_scores.html") # adds the html and beginning of JS to new webpage
 outfile=open("map_w_scores.html",'a')
 for station in scores:
-	if  scores[station]<= 10:
+	if  scores[station]<= 50:
 		pin_color='red'
-	elif scores[station] >10 and scores[station] <= 75:
+	elif scores[station] >50 and scores[station] <= 250:
 		pin_color='yellow'
-	elif scores[station] >75:
+	elif scores[station] >250:
 		pin_color='green'	
 	outfile.write("\t\t\t\t['%s', %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" % (station,station_location[station], pin_color))
 outfile.close()
 
 os.system("cat map_webpage_end.txt >> map_w_scores.html") # adds the html and beginning of JS to new webpage
-os.system("x-www-browser map_w_scores.html")
+os.system("firefox map_w_scores.html &")   #opens html document immediately; works on ubuntu
 
 
