@@ -7,7 +7,7 @@ The script will download .csv files from http://www.aemet.es/ to its current dir
 
 After collecting weather data from dozens of locations around Catalunya, Boldar creates a map with colored pins on each location to indicate the likelihood of finding mushrooms there. Green pins signify that mushrooms are very likely to be growing in the area, yellow pins means that there are probably mushrooms around, and red pins mean you aren't likely to find any mushrooms at all. 
 
-![https://github.com/willblev/boldar/blob/main/map_w_scores.png?raw=true]
+![Example of boldar prediction map](https://github.com/willblev/boldar/blob/main/map_w_scores.png?raw=true)
 _Hovering your mouse over a pin will display the name of the location._
 
 ## Usage
