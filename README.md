@@ -30,7 +30,7 @@ In your terminal, navigate to the directory containing all of Boldar's files, th
 cd ~/Downloads/boldar-main/ && python2 boldar.py
 ```
 
-It may raise an error the first time you run it, as the script was intended to be used with several weeks' worth of weather data, and the Aemet website will only permit you to automatically scrape data from the last week. The prediction is set to use weather data from the previous two weeks, so you should run it once or twice a week for a few weeks (to accumulate sufficient daily weather reports) before it will return useful predictions.
+It may raise an error like _IOError: [Errno 2] No such file or directory: 'aemet_weather.20.09.2020.csv'_ the first few times that you run it: This is because the default parameters include several weeks' worth of weather data, but the Aemet website will only permit you to automatically scrape data from the last week. Therefore you need to run Boldar once or twice a week for a few weeks to accumulate sufficient daily weather reports before it will return any useful predictions.
 
 
 ## Future features
