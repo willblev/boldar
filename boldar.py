@@ -1,9 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env/python2
 # -*- coding: cp1252 -*-
 
 import os, time, sys, csv, urllib, itertools
 from datetime import date, timedelta
 
+nearest_day=4
+farthest_day=14
 ############## define functions /classes / etc. #########################
 
 def download_csv(filename,days_ago):
@@ -22,9 +24,7 @@ def download_csv(filename,days_ago):
 					file_date=time.strptime(date_str,"%A %d %B %Y")### capture date info from string
 					date_str=time.strftime("%d.%m.%Y",file_date)   ### convert date to str for file name
 	os.rename("temp_aemet_weather.csv", "aemet_weather."+date_str+".csv") ### rename file with correct date
-				
-	
-
+					
 
 class Station:
 	def __init__(self, name, province, max_temp, min_temp, avg_temp, gust_wind, max_wind, prec_24h, prec_0_6, prec_6_12, prec_12_18, prec_18_24, days_ago):    
@@ -110,21 +110,27 @@ for x in range(1,10):
 	 filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
 	 last_week[x]=filename
 	 if os.path.isfile(filename):
-		 print "File %s already exists!"%(filename)
+		 print("File %s already exists!"%(filename))
 		 pass
 	 else:
 		 need_to_download[x]=filename
 		 
 
-for key, value in need_to_download.iteritems():  ###3. download any missing weather data files
-	print "Downloading %s ..."%(value)
+for key, value in need_to_download.items():  ###3. download any missing weather data files
+	print("Downloading %s ..."%(value))
 	download_csv(value,key)
 	time.sleep(0.4)	#break between downloads to (hopefully) avoid pissing off the server
 	
 list_of_stations=[]                              ###4. parse .csv files from 4-7 days ago
-print "Condsidering weather patterns from %s through %s" %((today - timedelta(7)).strftime('%d.%m.%Y'), (today - timedelta(4)).strftime('%d.%m.%Y'))
-for x in range(4,10):  
-	parse_csv(last_week[x],x,list_of_stations)
+print("Condsidering weather patterns from %s through %s" %((today - timedelta(farthest_day-1)).strftime('%d.%m.%Y'), (today - timedelta(nearest_day-1)).strftime('%d.%m.%Y')))
+for x in range(nearest_day,farthest_day):
+	try:
+		parse_csv(last_week[x],x,list_of_stations)
+	except KeyError:	# if we are looking farther back than 7 days, we have to add some keys to the dictionary 
+		lastweek=today - timedelta(x)
+		filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
+		last_week[x]=filename 
+		parse_csv(last_week[x],x,list_of_stations)
 	
 	
 list_of_stations.sort(key=lambda x: x.name, reverse=False) # arrange list by station name (secondary order by days ago)
@@ -138,7 +144,7 @@ for station in list_of_stations:
 outfile=open("scores_predicted.txt",'w')
 for w in sorted(scores, key=scores.get, reverse=True):  # save record of the scores
   outfile.write("%s, %d\n" %( w, scores[w]))
-  print scores[w]
+  print("%s, %d" %( w, scores[w]))
 outfile.close()
 
 
@@ -159,11 +165,12 @@ station_location={
 	'Cabac\xe9s':'41.24746, 0.733977',
 	'Caldes de Montbui':'41.631658, 2.166871',
 	'Castell, Platja dAro':'41.814447, 3.032187',
-	'Castello dEmpuries':'42.2583, 3.0750',
+	'Castell\xf3 dEmp\xfaries':'42.2583, 3.0750',
 	'Coll de Narg\xf3':'42.173822, 1.316197',
 	'Corbera, Pic dAgulles':'41.385064, 2.173403',
 	'El Soleràs':'41.413591, 0.68027',
 	'Espolla':'42.390946, 3.000686',
+	'Estaci\xf3n de Tortosa (Roquetes)':'40.8209, 0.5021',
 	'Esterri d\xc0neu':'42.626923, 1.122711',
 	'Figueres':'42.265507, 2.958105',
 	'Fogars de Montclús':'41.727493, 2.442842',
@@ -177,6 +184,7 @@ station_location={
 	'La Pobla de Cérvoles':'41.366967, 0.915552',
 	'La Pobla de Massaluca':'41.18078, 0.353361',
 	'La Seo dUrgell':'42.357578, 1.455553',
+	'La Seu dUrgell':'42.357578, 1.455553',
 	'La Vall de Bianya':'42.23009, 2.440639',
 	'La Vall de Boi':'42.528216, 0.848452',
 	'Les Planes dHostoles':'42.056386, 2.538365',
@@ -189,29 +197,35 @@ station_location={
 	'Moi\xe0':'41.809948, 2.097169',
 	'Mollerussa':'41.628738, 0.894182',
 	'Monistrol de Montserrat':'41.610778, 1.843416',
+	'Naut Aran, Arties':'42.6988, 0.8717',
 	'Os de Balaguer':'41.873344, 0.720617',
 	'Planoles':'42.316176, 2.103915',
 	'Pontons':'41.415008, 1.51663',
 	'Porqueres':'42.120195, 2.746287',
 	'Prat de Llu\xe7an\xe8s':'42.119271, 2.10182',
+	'Prats de Llu\xe7an\xe8s':'42.119271, 2.10182',
 	'Rasquera':'41.001926, 0.598512',
 	'Reus Aeropuerto':'41.146576, 1.165839',
 	'Ripoll':'42.199459, 2.190762',
 	'Sabadell Aeropuerto':'41.522163, 2.101317',
 	'Santa Susana':'41.639993, 2.710321',
+	'Santa Susanna':'41.639993, 2.710321',
 	'Sant Hilari':'41.817373, 2.520736',
 	'Sant Jaume dEnveja':'40.705971, 0.727148',
 	'Sant Juli\xe0  de Vilatorta':'41.924627, 2.321074',
 	'Sant Pau de Seg\xfaries':'42.263044, 2.367172',
+	'Sitges':'41.2372, 1.8059',
 	'Talarn':'42.186158, 0.899997',
 	'Tarragona':'41.118883, 1.244491',
-	'Tàrrega':'41.64808, 1.140943',
+	'T\xe0rrega':'41.64808, 1.140943',
 	'Tona':'41.849645, 2.227397',
 	'Torà':'41.81054, 1.403618',
 	'Torre de Cabdella':'42.421899, 0.982963',
 	'Tortosa':'40.812578, 0.521442',
+	'Tuixent':'42.2316, 1.5663',
 	'Valls':'41.285445, 1.249459',
-	'Vandell\xf3s':'41.019496, 0.831619',
+	'Vall de Bo\xed':'42.5282, 0.8485',
+	'Vandell\xf2s':'41.019496, 0.831619',
 	'Vilafranca del Pened\xe8s':'41.346127, 1.69794',
 	'Vilassar de Dalt':'41.5189, 2.3606'
 
@@ -232,6 +246,6 @@ for station in scores:
 outfile.close()
 
 os.system("cat map_webpage_end.txt >> map_w_scores.html") # adds the html and beginning of JS to new webpage
-os.system("firefox map_w_scores.html &")   #opens html document immediately; works on ubuntu
+os.system("x-www-browser map_w_scores.html &")   #opens html document immediately; works on ubuntu
 
 

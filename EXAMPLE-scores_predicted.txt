@@ -1,0 +1,50 @@
+Sant Pau de Segúries, 941
+Planoles, 687
+Vall de Boí, 571
+La Molina, 473
+Tuixent, 356
+Sant Hilari, 331
+Berga, 296
+Martinet, 278
+Moià, 221
+La Vall de Bianya, 139
+Prats de Lluçanès, 138
+Bossòst, 137
+Vilafranca del Penedès, 119
+Igualada, 118
+Tona, 114
+Figueres, 111
+Les Planes dHostoles, 110
+Arenys de Mar, 97
+Santa Susanna, 84
+Espolla, 81
+Sitges, 77
+Pontons, 75
+La Seu dUrgell, 71
+Talarn, 65
+Cabacés, 39
+Vilassar de Dalt, 34
+Llorac, 27
+Manresa, 26
+Girona, 23
+Maçanet de Cabrenys, 21
+Castelló dEmpúries, 17
+Blanes, 11
+Castell, Platja dAro, 4
+Barcelona, Museo Marítimo, 4
+Porqueres, 4
+Mollerussa, -2
+Lleida, -7
+Os de Balaguer, -8
+Llimiana, -9
+Balsareny, -35
+LEstartit, -37
+Caldes de Montbui, -44
+Estación de Tortosa (Roquetes), -56
+Reus Aeropuerto, -64
+La Pobla de Massaluca, -95
+Girona Aeropuerto, -100
+Rasquera, -108
+Coll de Nargó, -110
+Barcelona Aeropuerto, -123
+Barcelona, -125

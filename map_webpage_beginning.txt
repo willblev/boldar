@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Google Map Template with Custom Marker</title>
+	<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'></script>	<!-- Google Maps API -->
+	<script>
+	var map;	// Google map object
+	
+	// Initialize and display a google map
+	function Init()
+	{
+		// Create a Google coordinate object for where to center the map
+		var latlngcenter = new google.maps.LatLng(41.65, 1.8);	// Coordinates of Catalunya (area centroid)
+	
+		
+		var markers = [

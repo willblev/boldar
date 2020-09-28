@@ -1,0 +1,42 @@
+
+				];
+
+		// Map options for how to display the Google map
+		var mapOptions = { zoom: 8, center: latlngcenter  };
+		
+		// Show the Google map in the div with the attribute id 'map-canvas'.
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		
+		// Place a standard Google Marker at the same location as the map center (Washington, DC)
+		// When you hover over the marker, it will display the title
+	
+		
+		for( i = 0; i < markers.length; i++ ) {
+					var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+					marker = new google.maps.Marker({
+						position: position,
+						map: map,
+						title: markers[i][0],
+						icon : markers[i][3]
+					});
+	}
+}
+	
+	// Call the method 'Init()' to display the google map when the web page is displayed ( load event )
+	google.maps.event.addDomListener( window, 'load', Init );
+
+	</script>
+	<style>
+	/* style settings for Google map */
+	#map-canvas
+	{
+		width : 700px; 	/* map width */
+		height: 700px;	/* map height */
+	}
+	</style>
+</head>
+<body>
+	<!-- Dislay Google map here -->
+	<div id='map-canvas' ></div>
+</body>
+</html>
