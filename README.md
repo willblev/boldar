@@ -41,3 +41,5 @@ In the future I would like to add:
 - static mushroom profiles for each species, as different types of mushrooms tend to grow best in different conditions and at different times of the year
 - output to google maps to show the top 10 places to hunt
 - update to python 3
+- find API to scrape multiple weeks' worth of data at once
+- parse doppler images with CV libraries to have higher resolution predictions
