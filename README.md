@@ -5,9 +5,22 @@ The script will download .csv files from http://www.aemet.es/ to its current dir
 
 ## Example
 
-After collecting weather data from dozens of locations around Catalunya, Boldar creates a map with colored pins on each location to indicate the likelihood of finding mushrooms there. Green pins signify that mushrooms are very likely to be growing in the area, yellow pins means that there are probably mushrooms around, and red pins mean you aren't likely to find any mushrooms at all. 
+After collecting weather data from dozens of locations around Catalunya, Boldar makes a prediction of how likely it is that mushrooms are growing in each area. It ranks them from best to worst and saves these values in a file called _scores_predicted.txt_ that looks like this:
+
+```
+Sant Pau de Segúries, 941
+Planoles, 687
+Vall de Boí, 571
+La Molina, 473
+Tuixent, 356
+Vilafranca del Penedes, 352
+Sant Hilari, 331
+```
+
+Using these predictions, it creates a map in a file called _map_w_scores.html_ with colored pins on each location; green pins signify that mushrooms are very likely to be growing in the area, yellow pins means that there are probably mushrooms around, and red pins mean you aren't likely to find any mushrooms at all: 
 
 ![Example of boldar prediction map](https://github.com/willblev/boldar/blob/main/map_w_scores.png?raw=true)
+
 _Hovering your mouse over a pin will display the name of the location._
 
 ## Usage
