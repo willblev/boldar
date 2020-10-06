@@ -1,50 +1,49 @@
-Sant Pau de Segúries, 941
-Planoles, 687
-Vall de Boí, 571
-La Molina, 473
-Tuixent, 356
-Sant Hilari, 331
-Berga, 296
-Martinet, 278
-Moià, 221
-La Vall de Bianya, 139
-Prats de Lluçanès, 138
-Bossòst, 137
-Vilafranca del Penedès, 119
-Igualada, 118
-Tona, 114
-Figueres, 111
-Les Planes dHostoles, 110
-Arenys de Mar, 97
-Santa Susanna, 84
-Espolla, 81
-Sitges, 77
-Pontons, 75
-La Seu dUrgell, 71
-Talarn, 65
-Cabacés, 39
-Vilassar de Dalt, 34
-Llorac, 27
-Manresa, 26
-Girona, 23
-Maçanet de Cabrenys, 21
-Castelló dEmpúries, 17
-Blanes, 11
-Castell, Platja dAro, 4
-Barcelona, Museo Marítimo, 4
-Porqueres, 4
-Mollerussa, -2
-Lleida, -7
-Os de Balaguer, -8
-Llimiana, -9
-Balsareny, -35
-LEstartit, -37
-Caldes de Montbui, -44
-Estación de Tortosa (Roquetes), -56
-Reus Aeropuerto, -64
-La Pobla de Massaluca, -95
-Girona Aeropuerto, -100
-Rasquera, -108
-Coll de Nargó, -110
-Barcelona Aeropuerto, -123
-Barcelona, -125
+Sant Pau de SegÃºries, 1228
+Planoles, 1011
+Berga, 816
+Coll de NargÃ³, 812
+Pontons, 690
+Espolla, 627
+Sant Hilari, 618
+La Pobla de Massaluca, 593
+Barcelona Aeropuerto, 518
+Barcelona, 466
+La Vall de Bianya, 425
+MoiÃ , 360
+Tona, 359
+Vall de BoÃ­, 350
+Martinet, 348
+Blanes, 341
+Talarn, 286
+Manresa, 259
+Girona Aeropuerto, 257
+Os de Balaguer, 249
+Llorac, 247
+Castell, Platja dAro, 210
+Reus Aeropuerto, 193
+LEstartit, 180
+Balsareny, 168
+CastellÃ³ dEmpÃºries, 167
+Caldes de Montbui, 144
+Rasquera, 125
+Tuixent, 125
+Santa Susanna, 103
+Figueres, 101
+CabacÃ©s, 44
+Prats de LluÃ§anÃ¨s, 36
+Vilassar de Dalt, 15
+Mollerussa, 7
+Les Planes dHostoles, -8
+Lleida, -12
+Vilafranca del PenedÃ¨s, -57
+EstaciÃ³n de Tortosa (Roquetes), -92
+Igualada, -97
+La Molina, -108
+Porqueres, -128
+Sitges, -140
+BossÃ²st, -167
+Arenys de Mar, -192
+Barcelona, Museo MarÃ­timo, -222
+Girona, -239
+MaÃ§anet de Cabrenys, -317
+La Seu dUrgell, -804

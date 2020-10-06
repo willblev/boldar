@@ -1,11 +1,12 @@
 #!/usr/bin/env/python2
 # -*- coding: cp1252 -*-
 
-import os, time, sys, csv, urllib, itertools
+import os, time, sys, csv, urllib, itertools, math, subprocess
 from datetime import date, timedelta
 
-nearest_day=4
-farthest_day=14
+nearest_day=1
+farthest_day=21
+
 ############## define functions /classes / etc. #########################
 
 def download_csv(filename,days_ago):
@@ -53,11 +54,12 @@ class Station:
 		self.days_ago= days_ago	
 	
 	def gen_score(self):
-		if float(self.avg_temp)==15:
+		if float(self.avg_temp)==15: #ideal temp of 15C, more points for staying close
 			score=11
 		else:
-			score=10/(abs(float(self.avg_temp)-15))  #ideal temp of 15C, more points for staying close
-		score+=float(self.prec_24h)            #points for quantity of rain + extra for constant rain
+			score=10/(abs(float(self.avg_temp)-15))  
+
+		score+=float(self.prec_24h)     #points for quantity of rain + extra for constant rain
 		if float(self.prec_0_6) > 0:   
 			score+=1
 		if float(self.prec_6_12) > 0:
@@ -67,14 +69,15 @@ class Station:
 		if float(self.prec_18_24) > 0:
 			score+=1
 
-		score+=15-float(self.max_wind)/2  #wind over 15kph will dry out mushrooms
-		#print self.min_temp.strip()
-		if float(self.min_temp ) < 4:   # fixed penalties for extreme weather
-			score+=-30
+		if float(self.max_wind) > 15:  # wind over 15kph will dry out mushrooms, subtract points  
+			score+=float(self.max_wind)/2  
+
+		if float(self.min_temp ) < 5:   # penalties for extreme weather
+			score+=-70
 		if float(self.max_temp ) > 23:
 			score+=-10
-		if float(self.gust_wind) > 35:
-			score+=-5
+		if float(self.gust_wind) > 45:
+			score+=-10
 		score=score*(self.days_ago/3)
 		return score
 	
@@ -202,8 +205,8 @@ station_location={
 	'Planoles':'42.316176, 2.103915',
 	'Pontons':'41.415008, 1.51663',
 	'Porqueres':'42.120195, 2.746287',
-	'Prat de Llu\xe7an\xe8s':'42.119271, 2.10182',
-	'Prats de Llu\xe7an\xe8s':'42.119271, 2.10182',
+	'Prat de Llu\xe7an\xe8s':'42.0071, 2.0310',
+	'Prats de Llu\xe7an\xe8s':'42.0071, 2.0310',
 	'Rasquera':'41.001926, 0.598512',
 	'Reus Aeropuerto':'41.146576, 1.165839',
 	'Ripoll':'42.199459, 2.190762',
@@ -228,24 +231,44 @@ station_location={
 	'Vandell\xf2s':'41.019496, 0.831619',
 	'Vilafranca del Pened\xe8s':'41.346127, 1.69794',
 	'Vilassar de Dalt':'41.5189, 2.3606'
-
-
 }
 
+# Calculate some statistics to describe the distribution of scores in order to color the pins
+
+def variance(data, ddof=0):
+	n = len(data)
+	mean = sum(data) / n
+	return sum((x - mean) ** 2 for x in data) / (n - ddof)
+
+def stdev(data):
+	var = variance(data)
+	std_dev = math.sqrt(var)
+	return std_dev
+
+maximum_score=max(scores.values())
+minimum_score=min(scores.values())
+st_dev=stdev(scores.values())
+mean=sum(scores.values())/len(scores.values())
+
+low_score=mean-(.675*st_dev)  # below 1st quartile -> red
+mid_score=mean                # 1st to 2nd quartile -> orange
+high_score=mean+(.675*st_dev) # 2nd to 3rd quartile -> yellow
+                              # 3rd to 4th quartile -> green
 
 os.system("cat map_webpage_beginning.txt > map_w_scores.html") # adds the html and beginning of JS to new webpage
 outfile=open("map_w_scores.html",'a')
 for station in scores:
-	if  scores[station]<= 50:
+	if  scores[station]<= low_score:
 		pin_color='red'
-	elif scores[station] >50 and scores[station] <= 250:
+	elif scores[station] > low_score and scores[station] <= mid_score:
+		pin_color='orange'
+	elif scores[station] > mid_score and scores[station] <= high_score:
 		pin_color='yellow'
-	elif scores[station] >250:
+	elif scores[station] > high_score:
 		pin_color='green'	
-	outfile.write("\t\t\t\t['%s', %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" % (station,station_location[station], pin_color))
+	outfile.write("\t\t\t\t['%s : %s', %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" % (station,int(scores[station]),station_location[station], pin_color))
 outfile.close()
 
 os.system("cat map_webpage_end.txt >> map_w_scores.html") # adds the html and beginning of JS to new webpage
-os.system("x-www-browser map_w_scores.html &")   #opens html document immediately; works on ubuntu
-
-
+subprocess.call("x-www-browser map_w_scores.html", shell=True)   #opens html document immediately; works on ubuntu
+sys.exit()
