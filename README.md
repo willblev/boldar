@@ -17,7 +17,7 @@ Vilafranca del Penedes, 352
 Sant Hilari, 331
 ```
 
-Using these predictions, it creates an interactive map in a file called [_map_w_scores.html_](http://willblev.github.io/boldar/EXAMPLE-map_w_scores.html) with colored pins on each location; green pins signify that mushrooms are very likely to be growing in the area, yellow pins means that there are probably mushrooms around, and red pins mean you aren't likely to find any mushrooms at all: 
+Using these predictions, it creates an interactive map in a file called [_map_w_scores.html_](http://willblev.github.io/boldar/EXAMPLE-map_w_scores.html) with colored pins on each location; green pins indicate the top areas where mushrooms are very likely to be growing, yellow pins means that there are probably mushrooms around, orange pins are for the less favorable areas, and lastly, red pins indicate places that you aren't likely to find any mushrooms at all. (colors assigned by the quartiles of the scores)
 
 ![Example of boldar prediction map](https://github.com/willblev/boldar/blob/main/map_w_scores.png?raw=true)
 
@@ -38,8 +38,7 @@ It may raise an error like _IOError: [Errno 2] No such file or directory: 'aemet
 In the future I would like to add:
 
 - static profiles for each location (altitude, forest types, soil types, etc.) to improve the predictive power of this model
-- static mushroom profiles for each species, as different types of mushrooms tend to grow best in different conditions and at different times of the year
-- output to google maps to show the top 10 places to hunt
+- static mushroom profiles for each species, as different types of mushrooms tend to grow best in different conditions and at different times of the year (perhaps pin color could indicate mushroom species)
 - update to python 3
 - find API to scrape multiple weeks' worth of data at once
 - parse doppler images with CV libraries to have higher resolution predictions
