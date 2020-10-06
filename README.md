@@ -1,5 +1,5 @@
 # Boldar
-Boldar (Bolet Radar) A python script which scrapes weather records and tries to pinpoint the best area for mushroom hunting in Catalunya.
+Boldar (Bolet Radar) A python script which scrapes weather records and tries to pinpoint the best area for mushroom hunting in Catalunya. It then outputs the prediction as an [interactive map](http://willblev.github.io/boldar/EXAMPLE-map_w_scores.html). 
 
 The script will download .csv files from http://www.aemet.es/ to its current directory, and then it will parse them for information about precipitation, wind, temperature, etc. It uses this data to rank the best areas for mushroom hunting.
 
@@ -17,7 +17,7 @@ Vilafranca del Penedes, 352
 Sant Hilari, 331
 ```
 
-Using these predictions, it creates a map in a file called _map_w_scores.html_ with colored pins on each location; green pins signify that mushrooms are very likely to be growing in the area, yellow pins means that there are probably mushrooms around, and red pins mean you aren't likely to find any mushrooms at all: 
+Using these predictions, it creates an [interactive map](http://willblev.github.io/boldar/EXAMPLE-map_w_scores.html) in a file called _map_w_scores.html_ with colored pins on each location; green pins signify that mushrooms are very likely to be growing in the area, yellow pins means that there are probably mushrooms around, and red pins mean you aren't likely to find any mushrooms at all: 
 
 ![Example of boldar prediction map](https://github.com/willblev/boldar/blob/main/map_w_scores.png?raw=true)
 
