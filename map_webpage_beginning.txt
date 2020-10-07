@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Google Map Template with Custom Marker</title>
+	<title>Boldar prediction map</title>
 	<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'></script>	<!-- Google Maps API -->
 	<script>
 	var map;	// Google map object
