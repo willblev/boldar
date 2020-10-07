@@ -17,9 +17,9 @@ Vilafranca del Penedes, 352
 Sant Hilari, 331
 ```
 
-Using these predictions, it creates an interactive map in a file called [_map_w_scores.html_](http://willblev.github.io/boldar/EXAMPLE-map_w_scores.html) with colored pins on each location; green pins indicate the top areas where mushrooms are very likely to be growing, yellow pins means that there are probably mushrooms around, orange pins are for the less favorable areas, and lastly, red pins indicate places that you aren't likely to find any mushrooms at all. (colors assigned by the quartiles of the scores)
+Using these predictions, it creates an interactive map in a file called [_map_w_scores.html_](http://willblev.github.io/boldar/EXAMPLE-map_w_scores.html) with colored pins on each location; green pins indicate the top areas where mushrooms are very likely to be growing, yellow pins means that there are probably mushrooms around, orange pins are for the less favorable areas, and lastly, red pins indicate places that you aren't likely to find any mushrooms at all. Pin colors assigned by the quartiles of the scores, which can be checked by hovering over the four pins in the ocean (bottom right). 
 
-![Example of boldar prediction map](https://github.com/willblev/boldar/blob/main/map_w_scores.png?raw=true)
+![Example of boldar prediction map](https://github.com/willblev/boldar/blob/main/map.png?raw=true)
 
 **Hovering your mouse over a pin will display the name and score of the location.**
 

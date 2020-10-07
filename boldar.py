@@ -267,8 +267,23 @@ for station in scores:
 	elif scores[station] > high_score:
 		pin_color='green'	
 	outfile.write("\t\t\t\t['%s : %s', %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" % (station,int(scores[station]),station_location[station], pin_color))
+
+## add legend pins in bottom right corner to indicate scoring cutoffs
+legend_lat=40.800008
+legend_long=2.083294
+
+outfile.write("\t\t\t\t['Low score cutoff (%s pins): x < %s', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("red", int(low_score),legend_lat, legend_long, "red"))
+
+outfile.write("\t\t\t\t['Mid-low score cutoff (%s pins): %s < x < %s', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("orange", int(low_score), int(mid_score),legend_lat, legend_long+0.2, "orange"))
+
+outfile.write("\t\t\t\t['Mid-high score cutoff (%s pins): %s < x < %s', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("yellow", int(mid_score), int(high_score),legend_lat, legend_long+0.4, "yellow"))
+
+outfile.write("\t\t\t\t['High score cutoff (%s pins): %s < x', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("green", int(high_score),legend_lat, legend_long+0.6, "green"))
+
 outfile.close()
 
 os.system("cat map_webpage_end.txt >> map_w_scores.html") # adds the html and beginning of JS to new webpage
+
+## Open browser with the map, then exit
 subprocess.call("x-www-browser map_w_scores.html", shell=True)   #opens html document immediately; works on ubuntu
 sys.exit()
