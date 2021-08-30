@@ -108,7 +108,7 @@ today=date.today()                                ###1. check today's date
 
 last_week={}                                      ###2. check if necessary files are already downloaded
 need_to_download={}
-for x in range(1,7):    
+for x in range(1,8):    
 	 lastweek=today - timedelta(x)
 	 filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
 	 last_week[x]=filename
