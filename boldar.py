@@ -4,7 +4,7 @@
 import os, time, sys, csv, urllib, itertools, math, subprocess
 from datetime import date, timedelta
 
-nearest_day=1
+nearest_day=3
 farthest_day=21
 
 ############## define functions /classes / etc. #########################
@@ -108,7 +108,7 @@ today=date.today()                                ###1. check today's date
 
 last_week={}                                      ###2. check if necessary files are already downloaded
 need_to_download={}
-for x in range(1,10):    
+for x in range(1,7):    
 	 lastweek=today - timedelta(x)
 	 filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
 	 last_week[x]=filename
@@ -223,6 +223,7 @@ station_location={
 	'T\xe0rrega':'41.64808, 1.140943',
 	'Tona':'41.849645, 2.227397',
 	'Torà':'41.81054, 1.403618',
+	'Tordera - Granyanella':'41.4045, 1.1322',
 	'Torre de Cabdella':'42.421899, 0.982963',
 	'Tortosa':'40.812578, 0.521442',
 	'Tuixent':'42.2316, 1.5663',
