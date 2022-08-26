@@ -4,8 +4,9 @@
 import os, time, sys, csv, urllib, itertools, math, subprocess
 from datetime import date, timedelta
 
-nearest_day=3
-farthest_day=21
+nearest_day=2
+farthest_day=14
+
 
 ############## define functions /classes / etc. #########################
 
@@ -23,17 +24,12 @@ def download_csv(filename,days_ago):
 					split=line.split()
 					date_str=split[1].rstrip(',')+" "+split[2]+" "+split[3]+" "+split[4]
 					file_date=time.strptime(date_str,"%A %d %B %Y")### capture date info from string
-					date_str=time.strftime("%d.%m.%Y",file_date)   ### convert date to str for file name
+					date_str=time.strftime("%Y.%m.%d",file_date)   ### convert date to str for file name
 	os.rename("temp_aemet_weather.csv", "aemet_weather."+date_str+".csv") ### rename file with correct date
 					
 
 class Station:
 	def __init__(self, name, province, max_temp, min_temp, avg_temp, gust_wind, max_wind, prec_24h, prec_0_6, prec_6_12, prec_12_18, prec_18_24, days_ago):    
-		attribute_list=[name, province, max_temp, min_temp, avg_temp, gust_wind, max_wind, prec_24h, prec_0_6, prec_6_12, prec_12_18, prec_18_24]
-		for attribute in attribute_list:
-			if attribute=='':
-				raise ValueError("An attribute is absent from %s" %(attribute, self.__class__.__name__))	
-			
 				
 		self.name= name.replace("'", '')
 		self.province= province
@@ -85,14 +81,21 @@ class Station:
 		
 def parse_csv(file_name,days_ago,object_list):
 	"""This function takes a .csv file and adds the data to a Station object"""
-	csv_file= open(file_name, "rb")
-	reader = csv.reader(csv_file)
-	for line in itertools.islice(reader, 6, None):
-		try:
-			object_list.append(Station(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10],line[11],days_ago))
-		except:
-			pass
-	csv_file.close()
+	try:
+		csv_file= open(file_name, "rb")
+		reader = csv.reader(csv_file)
+		for line in itertools.islice(reader, 6, None):
+			try:
+				for i,entry in enumerate(line):
+					if entry=='':
+						line[i]='0'
+				object_list.append(Station(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10],line[11],days_ago))
+			except TypeError:
+				print("TypeError in file %s in the following line:\n%s"%(file_name,line))
+		csv_file.close()
+	except IOError:    # if we are missing a file (farther back than 7 days, so we cannot download it) we decrease the number of days we consider by 1
+			print("Unable to download nor encounter file %s ; skipping this file..."%(file_name))
+			missing_days.append(x)
 
 
 
@@ -110,10 +113,10 @@ last_week={}                                      ###2. check if necessary files
 need_to_download={}
 for x in range(1,8):    
 	 lastweek=today - timedelta(x)
-	 filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
+	 filename="aemet_weather."+lastweek.strftime('%Y.%m.%d')+".csv"
 	 last_week[x]=filename
 	 if os.path.isfile(filename):
-		 print("File %s already exists!"%(filename))
+		 print("File %s already exists, skipping download..."%(filename))
 		 pass
 	 else:
 		 need_to_download[x]=filename
@@ -124,16 +127,25 @@ for key, value in need_to_download.items():  ###3. download any missing weather 
 	download_csv(value,key)
 	time.sleep(0.4)	#break between downloads to (hopefully) avoid pissing off the server
 	
-list_of_stations=[]                              ###4. parse .csv files from 4-7 days ago
-print("Condsidering weather patterns from %s through %s" %((today - timedelta(farthest_day-1)).strftime('%d.%m.%Y'), (today - timedelta(nearest_day-1)).strftime('%d.%m.%Y')))
+list_of_stations=[]                              ###4. parse .csv files from nearest_day through farthest_day
+missing_days=[]
+print("Attempting to use weather patterns from %s through %s" %((today - timedelta(farthest_day-1)).strftime('%Y.%m.%d'), (today - timedelta(nearest_day-1)).strftime('%Y.%m.%d')))
 for x in range(nearest_day,farthest_day):
 	try:
 		parse_csv(last_week[x],x,list_of_stations)
 	except KeyError:	# if we are looking farther back than 7 days, we have to add some keys to the dictionary 
 		lastweek=today - timedelta(x)
-		filename="aemet_weather."+lastweek.strftime('%d.%m.%Y')+".csv"
+		filename="aemet_weather."+lastweek.strftime('%Y.%m.%d')+".csv"
 		last_week[x]=filename 
 		parse_csv(last_week[x],x,list_of_stations)
+		
+if len(missing_days) > 0:
+	missing_dates=[]
+	for day in missing_days:
+		missing_dates.append("%s" %(today - timedelta(day-1)).strftime('%Y.%m.%d'))
+	print("WARNING: Unable to find file for days: %s\nThe predictions will not be as accurate since there are missing data for your desired date range." % (", ".join(missing_dates)))
+
+		
 	
 	
 list_of_stations.sort(key=lambda x: x.name, reverse=False) # arrange list by station name (secondary order by days ago)
@@ -147,7 +159,7 @@ for station in list_of_stations:
 outfile=open("scores_predicted.txt",'w')
 for w in sorted(scores, key=scores.get, reverse=True):  # save record of the scores
   outfile.write("%s, %d\n" %( w, scores[w]))
-  print("%s, %d" %( w, scores[w]))
+  #print("%s, %d" %( w, scores[w]))
 outfile.close()
 
 
@@ -165,26 +177,30 @@ station_location={
 	'Berga':'42.10126, 1.843922',
 	'Blanes':'41.675995, 2.790229',
 	'Boss\xf2st':'42.785504, 0.692133',
+	'Cabo de Creus':'42.3202, 3.3150',
+	'Cap de Rec':'42.4312, 1.6684',
+	'Cap de Vaqu\xe8ira':'42.6914, 0.9737',
 	'Cabac\xe9s':'41.24746, 0.733977',
 	'Caldes de Montbui':'41.631658, 2.166871',
 	'Castell, Platja dAro':'41.814447, 3.032187',
 	'Castell\xf3 dEmp\xfaries':'42.2583, 3.0750',
 	'Coll de Narg\xf3':'42.173822, 1.316197',
 	'Corbera, Pic dAgulles':'41.385064, 2.173403',
-	'El Soleràs':'41.413591, 0.68027',
+	'El Soler\xe0s':'41.413591, 0.68027',
 	'Espolla':'42.390946, 3.000686',
 	'Estaci\xf3n de Tortosa (Roquetes)':'40.8209, 0.5021',
 	'Esterri d\xc0neu':'42.626923, 1.122711',
 	'Figueres':'42.265507, 2.958105',
-	'Fogars de Montclús':'41.727493, 2.442842',
+	'Fogars de Montcl\xfas':'41.727493, 2.442842',
 	'Girona':'41.979401, 2.821426',
 	'Girona Aeropuerto':'41.905727, 2.76335',
+	'Horta de Sant Joan':'40.9538, 0.3154',
 	'Igualada':'41.584782, 1.622654',
 	'Illes de Cerdanya,Cap de Rec':'41.61759, 0.620015',
 	'Josa i Tuix\xe9n':'42.254595, 1.608097',
 	'LEstartit':'42.051283, 3.190519',
 	'La Molina':'42.337605, 1.934988',
-	'La Pobla de Cérvoles':'41.366967, 0.915552',
+	'La Pobla de C\xe9rvoles':'41.366967, 0.915552',
 	'La Pobla de Massaluca':'41.18078, 0.353361',
 	'La Seo dUrgell':'42.357578, 1.455553',
 	'La Seu dUrgell':'42.357578, 1.455553',
@@ -205,6 +221,7 @@ station_location={
 	'Planoles':'42.316176, 2.103915',
 	'Pontons':'41.415008, 1.51663',
 	'Porqueres':'42.120195, 2.746287',
+	'Port Ain\xe9':'42.4283, 1.2120',
 	'Prat de Llu\xe7an\xe8s':'42.0071, 2.0310',
 	'Prats de Llu\xe7an\xe8s':'42.0071, 2.0310',
 	'Rasquera':'41.001926, 0.598512',
@@ -222,7 +239,7 @@ station_location={
 	'Tarragona':'41.118883, 1.244491',
 	'T\xe0rrega':'41.64808, 1.140943',
 	'Tona':'41.849645, 2.227397',
-	'Torà':'41.81054, 1.403618',
+	'Tor\xe0':'41.81054, 1.403618',
 	'Tordera - Granyanella':'41.4045, 1.1322',
 	'Torre de Cabdella':'42.421899, 0.982963',
 	'Tortosa':'40.812578, 0.521442',
@@ -274,16 +291,45 @@ legend_lat=40.800008
 legend_long=2.083294
 
 outfile.write("\t\t\t\t['Low score cutoff (%s pins): x < %s', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("red", int(low_score),legend_lat, legend_long, "red"))
-
 outfile.write("\t\t\t\t['Mid-low score cutoff (%s pins): %s < x < %s', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("orange", int(low_score), int(mid_score),legend_lat, legend_long+0.2, "orange"))
-
 outfile.write("\t\t\t\t['Mid-high score cutoff (%s pins): %s < x < %s', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("yellow", int(mid_score), int(high_score),legend_lat, legend_long+0.4, "yellow"))
-
 outfile.write("\t\t\t\t['High score cutoff (%s pins): %s < x', %s, %s,'http://maps.google.com/mapfiles/ms/icons/%s-dot.png'],\n" %("green", int(high_score),legend_lat, legend_long+0.6, "green"))
+
 
 outfile.close()
 
 os.system("cat map_webpage_end.txt >> map_w_scores.html") # adds the html and beginning of JS to new webpage
+
+## add table to the bottom of the map
+
+outfile=open("map_w_scores.html",'a')
+
+outfile.write("<p><img src='http://maps.google.com/mapfiles/ms/icons/%s-dot.png'>" % ('red'))
+outfile.write("Low score cutoff: x < %s</p>" %(int(low_score)))
+
+outfile.write("<p><img src='http://maps.google.com/mapfiles/ms/icons/%s-dot.png'>" % ('orange'))
+outfile.write("Mid-low score cutoff: %s < x < %s" %(int(low_score), int(mid_score)))
+
+outfile.write("<p><img src='http://maps.google.com/mapfiles/ms/icons/%s-dot.png'>" % ('yellow'))
+outfile.write("Mid-high score cutoff: %s < x < %s" %(int(mid_score), int(high_score)))
+
+outfile.write("<p><img src='http://maps.google.com/mapfiles/ms/icons/%s-dot.png'>" % ('green'))
+outfile.write("High score cutoff: %s < x" %( int(high_score)))
+
+
+outfile.write("<table>")
+outfile.write("\t<tr><th>Location</th><th>Score</th></tr>")
+
+
+for w in sorted(scores, key=scores.get, reverse=True):  # save record of the scores
+  outfile.write("\t<tr><td>%s</td><td>%d</td></tr>" %( w, scores[w]))
+
+outfile.write("</table>")
+
+outfile.write("</body>")
+outfile.write("</html>")
+outfile.close()
+
 
 ## Open browser with the map, then exit
 subprocess.call("x-www-browser map_w_scores.html", shell=True)   #opens html document immediately; works on ubuntu
